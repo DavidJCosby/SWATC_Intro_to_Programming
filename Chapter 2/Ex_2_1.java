@@ -7,7 +7,7 @@ Takes a celsius measurement from the user and converts it into fahrenheit
 */
 
 
-class Untitled {
+class Ex_2_1 {
 	public static void main(String[] args) {
 		System.out.println("Enter a degree in Celsius: ");
 		double celsius = 29.5; // placeholder until I figure out user input
