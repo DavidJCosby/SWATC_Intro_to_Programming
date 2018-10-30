@@ -18,27 +18,21 @@ class Ex_4_17 {
 		 String month = input.next();
 		 month = month.substring(0, 3).toLowerCase();
 				
-		int days = daysInMonth(month, year);
+		int days = 30; // default assumption
 		
-		System.out.println(month + " " + year + " has " + days + " days.");
-		
-	}
-	
-	public static int daysInMonth(String month, int year) {
-		if (month == "jan" || month == "mar" || month == "may" || month == "jul" || month == "aug" || month == "oct"|| month == "dec") {
-			return 31;
+		if (month.equals("jan") || month.equals("mar") || month.equals("may") || month.equals("jul") || month.equals("aug") || month.equals("oct") || month.equals("dec")) {
+			days = 31;
 		}
-		else if (month == "feb") {
+		else if (month.equals("feb")) {
 			boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 			if (isLeapYear == true) {
-				return 29;
+				days = 29;
 			}
 			else {
-				return 28;
+				days = 28;
 			}
 		}
-		else {
-			return 30;
-		}
+		
+		System.out.println(month + " " + year + " has " + days + " days.");
 	}
 }
