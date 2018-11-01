@@ -30,17 +30,17 @@ class Ex_4_23 {
 		double totalDeduction = round(federalWithholding + stateWithholding, 2);
 		double netPay = round(grossPay - totalDeduction, 2);
 				
-		DecimalFormat money = new DecimalFormat("####0.00");
-				
+		DecimalFormat money = new DecimalFormat("$####0.00");
+		
 		System.out.println("\nEmployee Name: " + name);
 		System.out.println("Hours worked: " + hoursWorked);
-		System.out.println("Pay Rate: $" + hourlyPayRate);
-		System.out.println("Gross Pay: $" + money.format(grossPay));
+		System.out.println("Pay Rate: " + money.format(hourlyPayRate));
+		System.out.println("Gross Pay: " + money.format(grossPay));
 		System.out.println("Deductions:");
-		System.out.println("\tFederal Withholding (" + (federalTaxRate * 100.0) + "%): $" + money.format(federalWithholding));
-		System.out.println("\tState Withholding (" + (stateTaxRate * 100.0) + "%): $" + money.format(stateWithholding));
-		System.out.println("\tTotal Deduction: $" + money.format(totalDeduction));
-		System.out.println("Net Pay: $" + money.format(netPay));
+		System.out.println("\tFederal Withholding (" + (federalTaxRate * 100.0) + "%): " + money.format(federalWithholding));
+		System.out.println("\tState Withholding (" + (stateTaxRate * 100.0) + "%): " + money.format(stateWithholding));
+		System.out.println("\tTotal Deduction: " + money.format(totalDeduction));
+		System.out.println("Net Pay: " + money.format(netPay));
 	}
 		
 	public static double round(double number, int places) {
