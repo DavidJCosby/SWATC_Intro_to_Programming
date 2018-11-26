@@ -9,30 +9,39 @@ import java.util.Scanner;
 
 class Ex_5_17 {
 	public static void main(String[] args) {
-	Scanner input = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
 
-	System.out.print("Enter the number of lines: ");
-	int rows = input.nextInt();
-		
-	for (int row = 1; row <= rows; row++) {
-	
-		String spacing = "  ";
-		String margin = new String(new char[rows-row]).replace("\0", spacing);
-		System.out.print(margin);
-		
-		for (int i = 0; i < row; i++) {
-			System.out.print((row - i) + " ");
-		}
-		for (int i = 2; i <= row; i++) {
-			System.out.print(i + " ");
+		int rows = 0;
+		while ((rows < 1) || (rows > 15)) {
+			System.out.print("Enter the number of rows (1-15): ");
+			rows = input.nextInt();
 		}
 		
-		
-		System.out.print("\n");
-
-		
-	// loop structure
-	}
-	
+		for (int row = 1; row <= rows; row++) {
+			String tab = "   ";
+			int tabsInMargin = rows - row;
+			
+			for (int i = 0; i < tabsInMargin; i++) { // margins
+				System.out.print(tab);
+			}
+			
+			
+			for (int col = row; col >= 1; col--) { // left side
+				String cellText = "" + col;
+				if (cellText.length() < 2) {
+					cellText += " ";
+				}
+				System.out.print(cellText + " ");
+			}
+			
+			for (int col = 2; col <= row; col++) { // right side
+				String cellText = "" + col;
+				if (cellText.length() < 2) {
+					cellText += " ";
+				}
+				System.out.print(cellText + " ");
+			}
+			System.out.print("\n");
+		}
 	}
 }
