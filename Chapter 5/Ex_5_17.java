@@ -18,9 +18,10 @@ class Ex_5_17 {
 		}
 		
 		for (int row = 1; row <= rows; row++) {
+			
 			String tab = "   ";
 			int tabsInMargin = rows - row;
-			
+				
 			for (int i = 0; i < tabsInMargin; i++) { // margins
 				System.out.print(tab);
 			}
