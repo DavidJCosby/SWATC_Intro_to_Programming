@@ -26,21 +26,12 @@ class Ex_5_17 {
 				System.out.print(tab);
 			}
 			
-			
 			for (int col = row; col >= 1; col--) { // left side
-				String cellText = "" + col;
-				if (cellText.length() < 2) {
-					cellText += " ";
-				}
-				System.out.print(cellText + " ");
+				System.out.printf("%3d", col);
 			}
 			
 			for (int col = 2; col <= row; col++) { // right side
-				String cellText = "" + col;
-				if (cellText.length() < 2) {
-					cellText += " ";
-				}
-				System.out.print(cellText + " ");
+				System.out.printf("%3d", col);
 			}
 			System.out.print("\n");
 		}
