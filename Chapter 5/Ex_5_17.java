@@ -12,7 +12,7 @@ class Ex_5_17 {
 		Scanner input = new Scanner(System.in);
 
 		int rows = 0;
-		while ((rows < 1) || (rows > 15)) {
+		while (rows < 1 || rows > 15) {
 			System.out.print("Enter the number of rows (1-15): ");
 			rows = input.nextInt();
 		}
