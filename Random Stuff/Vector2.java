@@ -44,6 +44,15 @@ public class Vector2 {
 	public void read() {
 		System.out.println(x + ", " + y);
 	}
+	
+	public Vector2 rotate(double angle) {
+		Vector2 normalizedSelf = this.unit();
+		double mag = this.magnitude();
+		double currentAngle = Math.atan2(normalizedSelf.y, normalizedSelf.x);
+		double newAngle = currentAngle + angle;
+		// convert back to unit
+		// multiply by magnitude
+	}
 
 
 	public static void main(String []args) {
