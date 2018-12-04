@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Vector2 {
 	double x;
 	double y;
@@ -47,9 +49,17 @@ public class Vector2 {
 	
 	public Vector2 rotate(double angle) {
 		Vector2 normalizedSelf = this.unit();
-		double mag = this.magnitude();
+		double magnitude = this.magnitude();
+		
 		double currentAngle = Math.atan2(normalizedSelf.y, normalizedSelf.x);
 		double newAngle = currentAngle + angle;
+		
+		double newX = Math.cos(newAngle);
+		double newY = Math.sin(newAngle);
+		
+		Vector2 normalizedRotationVector = new Vector2(newX, newY);
+		Vector2 magnitudeVector = new Vector2(magnitude, magnitude);
+		return normalizedRotationVector.times(magnitudeVector);
 		// convert back to unit
 		// multiply by magnitude
 	}
@@ -57,12 +67,16 @@ public class Vector2 {
 
 	public static void main(String []args) {
 		
-		Vector2 vector = new Vector2(10, 0);
-		vector.read();
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter x coordinate for vector: ");
+		double x = input.nextDouble();
+		System.out.print("Enter y coordinate for vector: ");
+		double y = input.nextDouble();
+		System.out.print("Enter the angle of rotation (degrees): ");
+		double angle = Math.toRadians(input.nextDouble());
 		
-		vector.unit().read();
-		double hypotenuseLength = vector.magnitude();
-		
-		System.out.print(hypotenuseLength);
+		Vector2 vector = new Vector2(x, y);
+		Vector2 rotated = vector.rotate(angle);
+		rotated.read();
 	}
 }
