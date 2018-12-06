@@ -1,3 +1,10 @@
+/* 
+Author: David Cosby
+Date: 12.6.18
+
+Generates an n-n matrix with random values where 'n' is defined by the user.
+*/
+
 import java.util.Scanner;
 
 class Ex_6_17 {	
