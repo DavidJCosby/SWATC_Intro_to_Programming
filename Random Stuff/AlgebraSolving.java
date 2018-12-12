@@ -1,8 +1,17 @@
 class Group {
-	Symbol[] contents;
-	
+	Symbol[] contents = new Symbol[100];
 	public Group(Symbol[] formula) {
 		contents = formula;
+	}
+	
+	public String toString() {
+		String composite = "";
+		
+		for (Symbol s : contents) {
+			composite += s;
+			//composite += s.toString();
+		}
+		return composite;
 	}
 	
 	//public Group simplify() {
@@ -11,8 +20,10 @@ class Group {
 
 }
 
+
 class Symbol {
-	String character;
+	
+	String character = "";
 	double value;
 	double coefficient = 1;
 	boolean hasValue = false;
@@ -23,10 +34,10 @@ class Symbol {
 	
 	public String toString() {
 		String returnValue = "";
-		if (coefficient == 0 || character == null) {
-			return returnValue;
+		if (coefficient == 0 || (""+character) == "null") {
+			return "";
 		}
-		
+		System.out.print("oof");
 		if (coefficient != 1) {
 			returnValue += coefficient;
 		}
@@ -51,12 +62,13 @@ class Symbol {
 class Equation {
 	public static Group formulaToGroup(String formula) {
 		String[] separatedFormula = formula.split("\\s+");
-		Symbol[] convertedSymbols};
+		Symbol[] convertedSymbols = new Symbol[100]; // todo: use up less memory please
 		
 		int i = 0;
 		for (String symbol : separatedFormula) {
-			i++;
 			convertedSymbols[i] = new Symbol(symbol);
+			i++;
+
 		}
 		return new Group(convertedSymbols);
 	}
@@ -66,9 +78,11 @@ class Equation {
 	
 	public Equation(String formula) {
 		Group separatedFormula = formulaToGroup(formula);
+		System.out.print(separatedFormula);
 	}
 	
 	public static void main(String[] args) {
 		Equation testEQ = new Equation("y = mx + b");
+		
 	}
 }
