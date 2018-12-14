@@ -1,7 +1,9 @@
 class Group {
-	Symbol[] contents = new Symbol[100];
+	Symbol[] contents;
+	
 	public Group(Symbol[] formula) {
-		contents = formula;
+		contents = new Symbol[formula.length];
+		contents = formula.clone();
 	}
 	
 	public String toString() {
@@ -21,6 +23,95 @@ class Group {
 }
 
 
+class EquationSegment {
+	String type = "Blank"; // Variable, Constant, Group, Blank
+	EquationSegment[] contents;
+	String symbol = "";
+	EquationSegment coefficient;
+	double value = 0;
+	boolean hasValueAssigned = false;
+	
+	public EquationSegment(String s) {
+		type = s;
+	}
+	
+	//public String toString() {
+		
+	//}
+	
+	
+	
+	public void assignSymbol(String s) {
+		if (type == "Group") {
+			System.out.print("Symbol cannot be assigned to " + this + " because it is of type Group.");
+			return void;
+		}
+		else {
+			symbol = s;
+		}
+	}
+	
+	public void assignValue(double v) {
+		if (type == "Group") {
+			System.out.print("Value cannot be directly assigned to " + this + " because it is of type Group.");
+			return void;
+		}
+		else {
+			value = v;
+			hasValueAssigned = true;
+		}
+	}
+	
+	public void assignCoefficient(EquationSegment c) {
+		if (type == "Constant") {
+			System.out.print("Coefficient cannot be assigned to Constants!");
+			return void;
+		}
+		else {
+			coefficient = c;
+		}
+	}
+	
+	
+	public void assignContents(EquationSegment[] newContents) {
+		if (!type == "Group") {
+			System.out.print("contents cannot be assigned to " + this + " because it isn't a group!");
+			return void;
+		}
+		else {
+			contents = new EquationSegment[newContents.length];
+			contents = newContents.clone();
+		}
+	}
+	
+	
+	public EquationSegment tryConvertToConstant() {
+		if (type == "Constant") {
+			return this;
+		}
+		else if (type == "Variable") {
+			if (hasValueAssigned) {
+				if (coefficient) {
+					coefficient = coefficient.tryConvertToConstant();
+					if (coefficient.type == "Variable") {
+						return this;
+					}
+					else {
+						/////////////////////////////////////////////////////////continue here
+					}
+				}
+				Double newValue = (coefficient * value);
+				Symbol converted = new Symbol("" + newValue);
+				converted.value = newValue;
+			}
+		}
+	}
+	
+	
+	
+}
+
+// rewriting below class to make it more usable.
 class Symbol {
 	
 	String character = "";
@@ -34,10 +125,9 @@ class Symbol {
 	
 	public String toString() {
 		String returnValue = "";
-		if (coefficient == 0 || (""+character) == "null") {
+		if (coefficient == 0 || ("" + character) == "null") {
 			return "";
 		}
-		System.out.print("oof");
 		if (coefficient != 1) {
 			returnValue += coefficient;
 		}
@@ -62,7 +152,7 @@ class Symbol {
 class Equation {
 	public static Group formulaToGroup(String formula) {
 		String[] separatedFormula = formula.split("\\s+");
-		Symbol[] convertedSymbols = new Symbol[100]; // todo: use up less memory please
+		Symbol[] convertedSymbols = new Symbol[separatedFormula.length]; // todo: use up less memory please
 		
 		int i = 0;
 		for (String symbol : separatedFormula) {
