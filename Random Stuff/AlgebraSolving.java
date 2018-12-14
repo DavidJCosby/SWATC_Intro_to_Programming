@@ -1,30 +1,5 @@
-class Group {
-	Symbol[] contents;
-	
-	public Group(Symbol[] formula) {
-		contents = new Symbol[formula.length];
-		contents = formula.clone();
-	}
-	
-	public String toString() {
-		String composite = "";
-		
-		for (Symbol s : contents) {
-			composite += s;
-			//composite += s.toString();
-		}
-		return composite;
-	}
-	
-	//public Group simplify() {
-		
-	//}
-
-}
-
-
 class EquationSegment {
-	String type = "Blank"; // Variable, Constant, Group, Blank
+	String type = "Blank"; // Variable, Constant, Group, Operator, Blank
 	EquationSegment[] contents;
 	String symbol = "";
 	EquationSegment coefficient;
@@ -35,26 +10,25 @@ class EquationSegment {
 		type = s;
 	}
 	
-	//public String toString() {
-		
-	//}
-	
-	
-	
-	public void assignSymbol(String s) {
-		if (type == "Group") {
-			System.out.print("Symbol cannot be assigned to " + this + " because it is of type Group.");
-			return void;
+	public String toString() {
+		if (type == "Variable" || type == "Constant" || type == "Operator") {
+			return symbol;
 		}
-		else {
-			symbol = s;
+		else if (type == "Group") {
+			String composite = "";
+			for (EquationSegment eqSeg : contents) {
+				composite += eqSeg;
+			}
+		}
+		else if (type == "Blank") {
+			return "";
 		}
 	}
 	
 	public void assignValue(double v) {
-		if (type == "Group") {
-			System.out.print("Value cannot be directly assigned to " + this + " because it is of type Group.");
-			return void;
+		if (type == "Group" || type == "Operator" || type == "Blank") {
+			System.out.print("Values cannot be assigned to " + type + "s.");
+			return null;
 		}
 		else {
 			value = v;
@@ -62,21 +36,26 @@ class EquationSegment {
 		}
 	}
 	
-	public void assignCoefficient(EquationSegment c) {
-		if (type == "Constant") {
-			System.out.print("Coefficient cannot be assigned to Constants!");
-			return void;
-		}
-		else {
-			coefficient = c;
+	public String getTrueCoefficientValue() {
+		
+		switch (coefficient.type) {
+			case "Constant":
+				return "" + coefficient.value;
+				break;
+			case "Variable":
+				if (coefficient.hasValueAssigned) {
+					return "" + (coefficient.value * Double.parseDouble(getTrueCoefficientValue()));
+				}
+				break;
+			default:
+				return "1";
+				break;
 		}
 	}
-	
 	
 	public void assignContents(EquationSegment[] newContents) {
 		if (!type == "Group") {
 			System.out.print("contents cannot be assigned to " + this + " because it isn't a group!");
-			return void;
 		}
 		else {
 			contents = new EquationSegment[newContents.length];
@@ -85,94 +64,81 @@ class EquationSegment {
 	}
 	
 	
-	public EquationSegment tryConvertToConstant() {
-		if (type == "Constant") {
-			return this;
-		}
-		else if (type == "Variable") {
-			if (hasValueAssigned) {
-				if (coefficient) {
-					coefficient = coefficient.tryConvertToConstant();
-					if (coefficient.type == "Variable") {
-						return this;
+	public EquationSegment substituteKnownVariablesWithTheirValues() {
+	
+		switch (type) {
+			case "Variable":
+				if (hasValueAssigned) {
+					if (getTrueCoefficientValue() == "1") {
+						EquationSegment convertedToConst = new EquationSegment("Constant");
+						convertedToConst.assignValue(value);
+						convertedToConst.symbol = "" + value;
+						return convertedToConst;
+					}
+					else if (getTrueCoefficientValue() == "0") {
+						EquationSegment convertedToBlank = new EquationSegment("Blank");
+						return convertedToBlank;
 					}
 					else {
-						/////////////////////////////////////////////////////////continue here
+						
+						// if, for example, x was known to have a value of 2, 6x would become 6(2);
+						
+						EquationSegment group = new EquationSegment("Group");
+						EquationSegment[] container = new EquationSegment[1];
+						
+						EquationSegment convertedToConst = new EquationSegment("Constant");
+						convertedToConst.assignValue(value);
+						convertedToConst.symbol = "" + value;
+						
+						container[0] = convertedToConst.clone();
+						
+						group.assignContents(container);
+						group.coefficient = coefficient.clone();
+						
+						return group;
 					}
 				}
-				Double newValue = (coefficient * value);
-				Symbol converted = new Symbol("" + newValue);
-				converted.value = newValue;
-			}
+				break;
+			default:
+				return this;
+				break;
 		}
-	}
-	
-	
-	
-}
-
-// rewriting below class to make it more usable.
-class Symbol {
-	
-	String character = "";
-	double value;
-	double coefficient = 1;
-	boolean hasValue = false;
-	
-	public Symbol(String s) {
-		character = s;
-	}
-	
-	public String toString() {
-		String returnValue = "";
-		if (coefficient == 0 || ("" + character) == "null") {
-			return "";
-		}
-		if (coefficient != 1) {
-			returnValue += coefficient;
-		}
-		returnValue += character;
-		
-		return returnValue;
-	}
-	
-	public Symbol tryConvertToConstant() {
-		if (!hasValue) {
-			return this;
-		}
-		Double newValue = (coefficient * value);
-		Symbol converted = new Symbol("" + newValue);
-		converted.value = newValue;
-		return converted;		
 	}
 }
-
-
 
 class Equation {
-	public static Group formulaToGroup(String formula) {
+	
+	public getTypeOfStringSegment(String seg) {
+		try {
+			
+		}
+	}
+	
+	public static EquationSegment formulaToGroup(String formula) {
 		String[] separatedFormula = formula.split("\\s+");
-		Symbol[] convertedSymbols = new Symbol[separatedFormula.length]; // todo: use up less memory please
+		Symbol[] convertedSegments = new EquationSegment[separatedFormula.length];
 		
 		int i = 0;
-		for (String symbol : separatedFormula) {
-			convertedSymbols[i] = new Symbol(symbol);
+		for (EquationSegment segment : separatedFormula) {
+			convertedSegments[i] = new EquationSegment(segment);
 			i++;
 
 		}
-		return new Group(convertedSymbols);
+		EquationSegment group = new EquationSegment("Group");
+		group.assignContents(convertedSegments);
+		return group;
 	}
 	
-	Group leftSide;
-	Group rightSide;
+	EquationSegment leftSide;
+	EquationSegment rightSide;
 	
 	public Equation(String formula) {
-		Group separatedFormula = formulaToGroup(formula);
+		EquationSegment separatedFormula = formulaToGroup(formula);
 		System.out.print(separatedFormula);
 	}
 	
 	public static void main(String[] args) {
-		Equation testEQ = new Equation("y = mx + b");
+		Equation testEQ = new Equation("54 + 93");
 		
 	}
 }
