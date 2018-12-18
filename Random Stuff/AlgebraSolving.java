@@ -107,19 +107,108 @@ class EquationSegment {
 }
 
 class Equation {
+
+	public EquationSegment newConstant(String num) {
+		EquationSegment const = new EquationSegment("Constant");
+		const.assignValue(Double.parseDouble(num));
+		const.symbol = num;
+		return const;
+	}
 	
-	public getTypeOfStringSegment(String seg) {
-		try {
-			
+	public EquationSegment newVariable(String symbol) {
+		EquationSegment var = new EquationSegment("Variable");
+		var.symbol = synbol;
+		return var;
+	}
+
+	public EquationSegment newGroup(EquationSegment[] contents) {
+		EquationSegment group = new EquationSegment("Group");
+		group.assignContents(contents);
+		return group;
+	}
+
+	
+	public static boolean isInteger(String s) { // via https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
+		try { 
+			Integer.parseInt(s); 
+		} catch(NumberFormatException e) { 
+			return false; 
+		} catch(NullPointerException e) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+	public EquationSegment clusterOfVariablesToSingleVariable(String cluster) {
+		if (isInteger(cluster)) {
+			return newConstant(cluster);
+		}
+		else {
+			if (cluster.length() == 1) {
+				return newVariable(seg);
+			}
+			else {
+				EquationSegment base = newVariable(cluster.substring(cluster.length() - 1, cluster.length() - 2));
+				EquationSegment[] coefficients = new EquationSegment[cluster.length - 1];
+				int counter = 0;
+				for (int i = cluster.length()-1; i > 0; i--) {
+					String seg = cluster.substring(i - 1, i - 2);
+					coefficients[counter] = newVariable(seg);
+				}
+				
+				for (int i = 0; i < coefficients.length; i++) {
+					coefficients[]
+				}
+			}
 		}
 	}
 	
+	public EquationSegment stringToSegment(String str) {
+		String uppercase = str.toUpperCase();
+		String[] splitByNumbers = str.split("[^A-Z0-9]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])");
+		String type = "Constant";
+		
+		if (splitByNumbers.length == 1) {
+			String seg = splitByNumbers[0];
+			if (seg.length() == 1) {
+				if (isInteger(seg)) {
+					return newConstant(seg);
+				}
+				else {
+					return newVariable(seg);
+				}
+			}
+		}
+		
+		else {
+			
+			String base = splitByNumbers[splitByNumbers.length-1];
+			
+			EquationSegment[] coefficients = new String[splitByNumbers.length-1];
+			
+			int counter = 0;
+			for (int i = (splitByNumbers.length-2); i > 0; i--) {
+				String portion = splitByNumbers[i];
+				if (isInteger(portion)) { // numeric coefficient
+					coefficients[counter] = newConstant(portion);
+				}
+				else { // variable or a bunch of variables
+					
+				}
+			}
+
+		}
+		
+			}
+	
 	public static EquationSegment formulaToGroup(String formula) {
-		String[] separatedFormula = formula.split("\\s+");
-		Symbol[] convertedSegments = new EquationSegment[separatedFormula.length];
+		String[] splitBySpaces = formula.split("\\s+");
+		Symbol[] convertedSegments = new EquationSegment[splitBySpaces.length];
 		
 		int i = 0;
-		for (EquationSegment segment : separatedFormula) {
+		for (EquationSegment segment : splitBySpaces) {
 			convertedSegments[i] = new EquationSegment(segment);
 			i++;
 
