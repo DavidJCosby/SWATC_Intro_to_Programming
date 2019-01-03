@@ -39,23 +39,6 @@ class EquationSegment {
 		}
 	}
 	
-	public String getTrueCoefficientValue() {
-		
-		switch (coefficient.type) {
-			case "Constant":
-				return "" + coefficient.value;
-
-			case "Variable":
-				if (coefficient.hasValueAssigned) {
-					return "" + (coefficient.value * Double.parseDouble(getTrueCoefficientValue()));
-				}
-				break;
-			default:
-				return "1";
-		}
-		return "";
-	}
-	
 	public void assignContents(EquationSegment[] newContents) {
 		if (type != "Group") {
 			System.out.print("contents cannot be assigned to " + this + " because it isn't a group!");
@@ -66,35 +49,7 @@ class EquationSegment {
 		}
 	}
 	
-	
-	public EquationSegment substituteKnownVariablesWithTheirValues() {
-	
-		switch (type) {
-			case "Variable":
-				if (hasValueAssigned) {
-					if (getTrueCoefficientValue() == "1") {
-						EquationSegment convertedToConst = new EquationSegment("Constant");
-						convertedToConst.assignValue(value);
-						convertedToConst.symbol = "" + value;
-						return convertedToConst;
-					}
-					else if (getTrueCoefficientValue() == "0") {
-						EquationSegment convertedToBlank = new EquationSegment("Blank");
-						return convertedToBlank;
-					}
-					else {
-						
-						// if, for example, x was known to have a value of 2, 6x would become 6(2)
-						return this;
-					}
-				}
-				break;
-			default:
-				return this;
-				break;
-		}
-	}
-	return this;
+
 }
 
 class Equation {
@@ -108,7 +63,7 @@ class Equation {
 	
 	public EquationSegment newVariable(String symbol) {
 		EquationSegment var = new EquationSegment("Variable");
-		var.symbol = synbol;
+		var.symbol = symbol;
 		return var;
 	}
 
@@ -149,13 +104,12 @@ class Equation {
 		}
 		
 		System.out.print(splitByCoefficients);
-		
 		return newConstant("83");
 	}
 	
 	public EquationSegment formulaToGroup(String formula) {
 		String[] splitBySpaces = formula.split("\\s+");
-		Symbol[] convertedSegments = new EquationSegment[splitBySpaces.length];
+		EquationSegment[] convertedSegments = new EquationSegment[splitBySpaces.length];
 		
 		int i = 0;
 		for (String segment : splitBySpaces) {
@@ -179,7 +133,7 @@ class Equation {
 	}
 	
 	public static void main(String[] args) {
-		Equation testEQ = new Equation("54 + 93");
+		Equation testEQ = new Equation("mx93.5b");
 		
 	}
 }
