@@ -88,7 +88,7 @@ class Equation {
 	
 	
 	public ArrayList<String> separateIntoCoefficientList(String str) {
-		String[] splitByNumbers = str.split("[^A-Z0-9]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])"); // TODO: find a way to do this that isn't terrible.
+		String[] splitByNumbers = str.split("[^A-Z0-9-.]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])"); // TODO: find a way to do this that isn't terrible.
 		ArrayList<String> splitByCoefficients = new ArrayList<String>();
 		
 		for (String seg : splitByNumbers) {
@@ -121,7 +121,7 @@ class Equation {
 	}
 	
 	public EquationSegment mergeCoefficients(ArrayList<EquationSegment> coefficients) {
-		return newConstant("84");
+		ArrayList<EquationSegment>
 	}
 	
 	public EquationSegment stringToCoefficient(String s) {
@@ -153,11 +153,10 @@ class Equation {
 	public Equation(String formula) {
 		formula = formula.toUpperCase();
 		EquationSegment separatedFormula = formulaToGroup(formula);
-		System.out.print(separatedFormula);
 	}
 	
 	public static void main(String[] args) {
-		Equation testEQ = new Equation("mx935b");
+		Equation testEQ = new Equation("3.14rrh mxb");
 		
 	}
 }
