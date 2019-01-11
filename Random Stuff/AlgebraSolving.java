@@ -13,15 +13,27 @@ class EquationSegment {
 	}
 	
 	public String toString() {
+		String base = "";
+		if (coefficient != null) {
+			if (coefficient.value != 1) {
+				if (coefficient.value == -1) {
+					base = "-";
+				}
+				else {
+					base = coefficient + "";
+				}
+			}
+
+		}
 		if (type == "Variable" || type == "Constant" || type == "Operator") {
-			return symbol;
+			return base + symbol;
 		}
 		else if (type == "Group") {
-			String composite = "";
+			String composite = base + "(";
 			for (EquationSegment eqSeg : contents) {
 				composite += eqSeg;
 			}
-			return composite;
+			return composite + ")";
 		}
 		else if (type == "Blank") {
 			return "";
@@ -87,7 +99,7 @@ class Equation {
 	}
 	
 	
-	public ArrayList<String> separateIntoCoefficientList(String str) {
+	public ArrayList<String> extractCoefficients(String str) {
 		String[] splitByNumbers = str.split("[^A-Z0-9-.]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])"); // TODO: find a way to do this that isn't terrible.
 		ArrayList<String> splitByCoefficients = new ArrayList<String>();
 		
@@ -103,7 +115,7 @@ class Equation {
 			}
 		}
 		
-		System.out.print(splitByCoefficients);
+		//System.out.print(splitByCoefficients);
 		return splitByCoefficients;
 	}
 	
@@ -120,17 +132,33 @@ class Equation {
 		return segments;
 	}
 	
+	
 	public EquationSegment mergeCoefficients(ArrayList<EquationSegment> coefficients) {
-		ArrayList<EquationSegment>
+		while (coefficients.size() > 1) {
+			EquationSegment base = coefficients.get(1);
+			EquationSegment coef = coefficients.get(0);
+
+			base.coefficient = coef;
+			coefficients.set(1, base);
+			coefficients.remove(0);
+		}
+		return coefficients.get(0);
 	}
 	
 	public EquationSegment stringToCoefficient(String s) {
-		ArrayList<String> coefficientList = separateIntoCoefficientList(s);
+		ArrayList<String> coefficientList = extractCoefficients(s);
 		ArrayList<EquationSegment> variables = coefficientListToSegments(coefficientList);
+		//return newConstant("420");
 		return mergeCoefficients(variables);
 	}
 	
+	
+
+	
 	public EquationSegment formulaToGroup(String formula) {
+		
+		
+		
 		String[] splitBySpaces = formula.split("\\s+");
 		EquationSegment[] convertedSegments = new EquationSegment[splitBySpaces.length];
 		
@@ -138,7 +166,8 @@ class Equation {
 		for (String segment : splitBySpaces) {
 			
 			EquationSegment coefficientForm = stringToCoefficient(segment);
-			convertedSegments[i] = new EquationSegment(segment);
+			//System.out.println(coefficientForm);
+			convertedSegments[i] = coefficientForm;
 			i++;
 
 		}
@@ -152,11 +181,24 @@ class Equation {
 	
 	public Equation(String formula) {
 		formula = formula.toUpperCase();
-		EquationSegment separatedFormula = formulaToGroup(formula);
+		int equalSignPosition = formula.indexOf('=');
+		
+		if (equalSignPosition > 0) {
+			String right = formula.substring(equalSignPosition + 1);
+			//System.out.print(right);
+			rightSide = formulaToGroup(right);
+			String left = formula.substring(0, equalSignPosition);
+			leftSide = formulaToGroup(left);
+		}
+		else {
+			leftSide = formulaToGroup(formula);
+		}
+		
+		System.out.print(leftSide + " = " + rightSide);
 	}
 	
 	public static void main(String[] args) {
-		Equation testEQ = new Equation("3.14rrh mxb");
+		Equation testEQ = new Equation("y=3.14rrh");
 		
 	}
 }
