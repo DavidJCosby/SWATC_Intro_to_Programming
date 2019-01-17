@@ -84,6 +84,11 @@ class Equation {
 		group.assignContents(contents);
 		return group;
 	}
+	
+	public EquationSegment newOperator(String symbol) {
+		EquationSegment operator = new EquationSegment("Operator");
+		operator.symbol = symbol;
+	}
 
 	
 	public static boolean isNumber(String s) { // via https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
@@ -156,8 +161,8 @@ class Equation {
 
 	
 	public EquationSegment formulaToGroup(String formula) {
-		
-		
+		//formula = formula.replaceAll("\\s+", "");
+		int lastInterruption = 0;
 		
 		String[] splitBySpaces = formula.split("\\s+");
 		EquationSegment[] convertedSegments = new EquationSegment[splitBySpaces.length];
