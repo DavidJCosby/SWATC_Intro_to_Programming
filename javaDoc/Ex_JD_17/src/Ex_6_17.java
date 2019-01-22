@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /** 
  * <h1> Matrix Generator </h1> 
  * <p> Generates an n-n matrix with random values where 'n' is defined by the user. </p>
@@ -5,8 +7,6 @@
 
  * @author David Cosby
 */
-
-import java.util.Scanner;
 
 public class Ex_6_17 {	
 
