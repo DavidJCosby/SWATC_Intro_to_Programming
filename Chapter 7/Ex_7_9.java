@@ -1,6 +1,6 @@
 /* 
  Author: David Cosby
- Date: 1.1.18
+ Date: 2.1.19
 
  finds the minimum value given in a series of numbers
 */
