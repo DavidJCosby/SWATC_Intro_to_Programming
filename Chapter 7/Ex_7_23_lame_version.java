@@ -63,6 +63,7 @@ class Ex_7_23_lame_version {
 		}
 	}
 	
+	
 	static boolean[] lockers = new boolean[100];
 	
 	public static void main(String[] args) {
