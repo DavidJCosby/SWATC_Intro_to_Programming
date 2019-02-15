@@ -13,7 +13,6 @@ class Ex_8_5 {
 		String base = "";
 		
 		for (int row = 0; row < 3; row++) {
-			base += "  ";
 			for (int col = 0; col < 3; col++) {
 				base += m[row][col] + "\t";
 			}
@@ -67,6 +66,5 @@ class Ex_8_5 {
 		
 		System.out.println("A + B = ");
 		System.out.print(matrixToString(c));
-
 	}
 }
