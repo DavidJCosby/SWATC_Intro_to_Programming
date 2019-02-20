@@ -1,6 +1,6 @@
 /* 
  Author: David Cosby
- Date: 2.7.19
+ Date: 2.20.19
 
 Generates a binary matrix, where 0's and 1's are replaced with H's and T's from an integer input.
 */
