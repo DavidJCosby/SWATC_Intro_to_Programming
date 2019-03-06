@@ -22,13 +22,14 @@ class Ex_8_37 {
 		{"South Dakota", "Pierre"},
 	};
 	
-	public static int randomNumber(int max) {
-		int num = (int) Math.floor((Math.random() * max) + 0.5);
+	public static int randomInt(int min, int max) {
+		int range = max - min;
+		int num = min + (int) Math.round((Math.random() * range));
 		return num;
 	}
 	
-	public static String[] grabRandomPair() {
-		int index = randomNumber(9);
+	public static String[] getRandomStateCapitalPair() {
+		int index = randomInt(0, 9);
 		return stateCapitalPairs[index];
 	}
 	
@@ -39,19 +40,21 @@ class Ex_8_37 {
 		return(answer.equals(capital));
 	}
 	
-	public static String promptUserForAnswer(String[] stateCapitalPair) {
+	public static String askUserForCapitalOf(String state) {
 		Scanner input = new Scanner(System.in);
-		System.out.println("What is the capital of " + stateCapitalPair[0] + "?");
+		System.out.println("What is the capital of " + state + "?");
 		System.out.print("\t");
 		
 		return input.next();
 	}
 	
 	public static void QuizUser() {
-		String[] stateCapitalPair = grabRandomPair();
+		String[] stateCapitalPair = getRandomStateCapitalPair();
+		String state = stateCapitalPair[0];
+		String capital = stateCapitalPair[1];
 		
-		String response = promptUserForAnswer(stateCapitalPair);
-		boolean correct = checkEquivalent(response, stateCapitalPair[1]);
+		String response = askUserForCapitalOf(state);
+		boolean correct = checkEquivalent(response, capital);
 		
 		if (correct) {
 			System.out.println("Correct!");
@@ -65,9 +68,14 @@ class Ex_8_37 {
 		Scanner input = new Scanner(System.in);
 	
 		System.out.print("\n Another? (Y/N) ");
-		String response = input.next();
+		String response = input.next().toLowerCase();
 		
-		return !(response.toLowerCase().equals("y"));
+		if (response.equals("y")) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 		
 	public static void main(String[] args) {
